@@ -4,125 +4,171 @@
 // Estructuras usadas en el programa
 struct Materiales
 {
-    int plastico;
-    int metal;
-    int madera;
-};
-struct Empresa
-{
-    struct Materiales EmpresaMateriales[3];
+    char Name_resources;
+    float Cuantity_resources;
 };
 
-struct Opciones
+struct Productos
 {
     int NumberProdcut;
     char NameProducts[50];
     int IdProducts;
     int Cuantity;
-    struct Materiales materiales1[3];
+    struct Materiales materiales1[20];
     int time;
     int demand;
 };
 
-// Funcion Recursos iniciales de la empresa
-void get_resources_em(int numberProduct, struct Empresa materialesProductos[numberProduct])
+int validNumber(int number)
 {
-    printf("------------------RECURSOS DE LA EMPRESA-----------------\n");
-    printf("Ingrese la cantidad de Plastico que posee la empresa: ");
-    scanf("%d", &materialesProductos[0].EmpresaMateriales[0].plastico);
-    printf("Ingrese la cantidad de Metal que posee la empresa: ");
-    scanf("%d", &materialesProductos[0].EmpresaMateriales[0].metal);
-    printf("Ingrese la cantidad de Cobre que posee la empresa: ");
-    scanf("%d", &materialesProductos[0].EmpresaMateriales[0].madera);
-}
-
-// Funcion Cambiar recursos de la empresa
-
-void change_resources_em(int numberProduct, struct Empresa materialesProductos[numberProduct])
-{
-    printf("------------------ CAMBIO RECURSOS DE LA EMPRESA-----------------\n");
-    printf("Perfecto, Ingrese nuevamente todos los valores:\n");
-    printf("Ingrese la cantidad de Plastico que posee la empresa:");
-    scanf("%d", &materialesProductos[0].EmpresaMateriales[0].plastico);
-    printf("Ingrese la cantidad de Metal que posee la empresa: ");
-    scanf("%d", &materialesProductos[0].EmpresaMateriales[0].metal);
-    printf("Ingrese la cantidad de Cobre que posee la empresa: ");
-    scanf("%d", &materialesProductos[0].EmpresaMateriales[0].madera);
+    if (number < 0)
+    {
+        printf("El numero no puede ser negativo\n");
+        return 0;
+    }
+    else
+    {
+        return 1;
+    }
 }
 
 // Funcion para obtener el nombre de productos
-void getname_data(int numberProduct, struct Opciones productos[numberProduct])
+void getname_data(int numberProduct, struct Productos productos1[numberProduct])
 {
+    printf("----------------Bienvenido a la aplicacion--------------\n");
     printf("------------------ NOMBRE DE PRODUCTOS -----------------\n");
-    getchar();
     for (size_t i = 0; i < numberProduct; i++)
     {
         printf("Ingrese el nombre de el producto %ld: ", i + 1);
-        fgets(productos[i].NameProducts, 50, stdin);
+        fgets(productos1[i].NameProducts, 50, stdin);
     }
 }
 
 // Funcion de creación automatica de ID de productos
-void createID(int numberProduct, struct Opciones productos[numberProduct])
+void createID(int numberProduct, struct Productos productos1[numberProduct])
 {
     printf("------------------ ID DE PRODUCTOS -----------------\n");
     for (size_t i = 0; i < numberProduct; i++)
     {
-        productos[i].IdProducts = i;
-        printf("El ID del producto %ld es = %ld\n", (i + 1), (i));
+        productos1[i].IdProducts = i + 1;
+        printf("El ID del producto %ld es = %d\n", (i + 1), productos1[i].IdProducts);
     }
 }
 
 // Funcion para obtener la cantidad de elementos de cada producto
-void get_cuantity(int numberProdcut, struct Opciones productos[numberProdcut])
+void get_cuantity(int numberProdcut, struct Productos productos1[numberProdcut])
 {
     printf("------------------ CANTIDAD DE PRODUCTOS -----------------\n");
     for (size_t i = 0; i < numberProdcut; i++)
     {
-        printf("Ingrese la cantidad del producto con ID %d: ", (productos[i].IdProducts));
-        scanf("%d", &productos[i].Cuantity);
+        do
+        {
+            printf("Ingrese la cantidad del producto con ID %d: ", (productos1[i].IdProducts));
+            scanf("%d", &productos1[i].Cuantity);
+        } while (validNumber(productos1[i].Cuantity) == 0);
     }
 }
 
 // Funcion para obtener la cantidad de materiales de cada producto
-void get_materials(int numberProdcut, struct Opciones productos[numberProdcut])
+void get_materials(int numberProdcut, struct Productos productos1[numberProdcut])
 {
+    int temp;
     printf("------------------ MATERIALES DE PRODUCTOS -----------------\n");
     for (size_t i = 0; i < numberProdcut; i++)
     {
-        printf("Ingrese la cantidad de plastico del producto con ID %d: ", (productos[i].IdProducts));
-        scanf("%d", &productos[i].materiales1[0].plastico);
-        printf("Ingrese la cantidad de metal del producto con ID %d: ", (productos[i].IdProducts));
-        scanf("%d", &productos[i].materiales1[0].metal);
-        printf("Ingrese la cantidad de cobre del producto con ID %d: ", (productos[i].IdProducts));
-        scanf("%d", &productos[i].materiales1[0].madera);
+        printf("------ PRODUCTO %ld ------\n", (i + 1));
+        do
+        {
+
+            printf("Ingrese la cantidad de materiales que componene al producto con el ID %d: ", (productos1[i].IdProducts));
+            scanf("%d", &temp);
+        } while (validNumber(temp) == 0);
+
+        for (size_t j = 0; j < temp; j++)
+        {
+            printf("Ingrese el nombre del material %ld que tiene el producto  con el ID %d: ", (j + 1), (productos1[i].IdProducts));
+            scanf("%s", &productos1[i].materiales1[j].Name_resources);
+            do
+            {
+                printf("Ingrese la cantidad en Kg del material: ");
+                scanf("%f", &productos1[i].materiales1[j].Cuantity_resources);
+            } while (validNumber(productos1[i].materiales1[j].Cuantity_resources) == 0);
+        }
+    }
+}
+// esta funcion cambia los materiales del ID seleccionao
+void change_materials(int numberProdcut, struct Productos productos1[numberProdcut])
+{
+    int ID, temp = 0;
+    printf("------------------ CAMBIO DE MATERIALES DE PRODUCTOS -----------------\n");
+    printf("Ingrese el ID del producto que desea editar: ");
+    scanf("%d", &ID);
+    getchar();
+    for (size_t i = 0; i < numberProdcut; i++)
+    {
+        // Comprobando si el ID existe
+        if (ID == productos1[i].IdProducts)
+        {
+            do
+            {
+
+                printf("Ingrese la cantidad de materiales que componene al producto con el ID %d: ", (ID));
+                scanf("%d", &temp);
+            } while (validNumber(temp) == 0);
+            for (size_t j = 0; j < temp; j++)
+            {
+                printf("Ingrese el nombre del material %ld que tiene el producto  con el ID %d: ", (j + 1), (productos1[i].IdProducts));
+                scanf("%s", &productos1[i].materiales1[0].Name_resources);
+                do
+                {
+
+                    printf("Ingrese la cantidad en Kg del material: ");
+                    scanf("%f", &productos1[i].materiales1[0].Cuantity_resources);
+                } while (validNumber(productos1[i].materiales1[0].Cuantity_resources) == 0);
+            }
+        }
+        temp = 1;
+        break;
+    }
+    // Si el ID no existe, se valida
+    if (temp == 0)
+    {
+        printf("El ID no existe\n");
     }
 }
 
 // Funcion para obtener el tiempo de fabricación de cada producto
-void get_time(int numberProdcut, struct Opciones productos[numberProdcut])
+void get_time(int numberProdcut, struct Productos productos1[numberProdcut])
 {
     printf("------------------ TIEMPO DE PRODUCTOS -----------------\n");
     for (size_t i = 0; i < numberProdcut; i++)
     {
-        printf("Ingrese el tiempo necesario para fabricar (en días) del producto con ID %d: ", (productos[i].IdProducts));
-        scanf("%d", &productos[i].time);
+        do
+        {
+
+            printf("Ingrese el tiempo necesario para fabricar (en días) del producto con ID %d: ", (productos1[i].IdProducts));
+            scanf("%d", &productos1[i].time);
+        } while (validNumber(productos1[i].time) == 0);
     }
 }
 
 // Funcion para obtener la demanda de cada producto
-void get_demand(int numberProdcut, struct Opciones productos[numberProdcut])
+void get_demand(int numberProdcut, struct Productos productos1[numberProdcut])
 {
     printf("------------------ DEMANDA DE PRODUCTOS -----------------\n");
     for (size_t i = 0; i < numberProdcut; i++)
     {
-        printf("Ingrese la demanda del producto con ID %d: ", (productos[i].IdProducts));
-        scanf("%d", &productos[i].demand);
+        do
+        {
+
+            printf("Ingrese la demanda del producto con ID %d: ", (productos1[i].IdProducts));
+            scanf("%d", &productos1[i].demand);
+        } while (validNumber(productos1[i].demand) == 0);
     }
 }
 
 // Funcion para buscar el ID de un producto y editarlo
-void findID(int numberProdcut, struct Opciones productos[numberProdcut])
+void findID(int numberProdcut, struct Productos productos1[numberProdcut])
 {
 
     int ID, temp = 0;
@@ -132,18 +178,29 @@ void findID(int numberProdcut, struct Opciones productos[numberProdcut])
     for (size_t i = 0; i < numberProdcut; i++)
     {
         // Comprobando si el ID existe
-        if (ID == productos[i].IdProducts)
+        if (ID == productos1[i].IdProducts)
         {
-
-            printf("El ID buscado fue el %d, que tenia como nombre %s\n", ID, productos[i].NameProducts);
+            printf("------MODIFICANDO PRODUCTO %ld ------\n", (i + 1));
+            printf("El ID buscado fue el %d, que tenia como nombre %s\n", ID, productos1[i].NameProducts);
             printf("Ingrese el nombre de el producto %ld:", i + 1);
-            fgets(productos[i].NameProducts, 50, stdin);
-            printf("Ingrese la cantidad del producto con ID %d:", (productos[i].IdProducts));
-            scanf("%d", &productos[i].Cuantity);
-            printf("Ingrese el tiempo necesario para fabricar el producto con ID %d:", (productos[i].IdProducts));
-            scanf("%d", &productos[i].time);
-            printf("Ingrese la demanda del producto con ID %d:", (productos[i].IdProducts));
-            scanf("%d", &productos[i].demand);
+            fgets(productos1[i].NameProducts, 50, stdin);
+            do
+            {
+                printf("Ingrese la cantidad del producto con ID %d:", (productos1[i].IdProducts));
+                scanf("%d", &productos1[i].Cuantity);
+            } while (validNumber(productos1[i].Cuantity) == 0);
+            do
+            {
+                printf("Ingrese el tiempo necesario para fabricar el producto con ID %d:", (productos1[i].IdProducts));
+                scanf("%d", &productos1[i].time);
+            } while (validNumber(productos1[i].time) == 0);
+
+            do
+            {
+
+                printf("Ingrese la demanda del producto con ID %d:", (productos1[i].IdProducts));
+                scanf("%d", &productos1[i].demand);
+            } while (validNumber(productos1[i].demand) == 0);
             printf("El producto se ha actualizado con exito\n");
             temp = 1;
             break;
@@ -157,7 +214,7 @@ void findID(int numberProdcut, struct Opciones productos[numberProdcut])
 }
 
 // Funcion para eliminar un producto
-void deleteProduct(int numberProdcut, struct Opciones productos[numberProdcut])
+void deleteProduct(int numberProdcut, struct Productos productos1[numberProdcut])
 {
     int ID, temp = 0;
     printf("Ingrese el ID del rpoducto que desea editar:");
@@ -166,11 +223,11 @@ void deleteProduct(int numberProdcut, struct Opciones productos[numberProdcut])
     for (size_t i = 0; i < numberProdcut; i++)
     {
         // Comprobando si el ID existe
-        if (ID == productos[i].IdProducts)
+        if (ID == productos1[i].IdProducts)
         {
-            printf("El ID eliminado fue el %d, que tenia como nombre %s\n", ID, productos[i].NameProducts);
+            printf("El ID eliminado fue el %d, que tenia como nombre %s\n", ID, productos1[i].NameProducts);
             // colocando el ID mayor a 5, hace que el producto no entre en los parametros. Eliminandolo
-            productos[i].IdProducts = 6;
+            productos1[i].IdProducts = 6;
             temp = 1;
         }
     }
@@ -181,21 +238,31 @@ void deleteProduct(int numberProdcut, struct Opciones productos[numberProdcut])
     }
 }
 // Funcion para calcular el tiempo total de fabricacion
-void calculate_time(int numberProdcut, struct Opciones productos[numberProdcut])
+void calculate_time(int numberProdcut, struct Productos productos1[numberProdcut])
 {
     int totalTime = 0;
     for (size_t i = 0; i < numberProdcut; i++)
     {
-        totalTime += productos[i].time;
+        totalTime += productos1[i].time;
     }
-    printf("El tiempo total de fabricacion es: %d\n", totalTime);
+    printf("El tiempo total de fabricacion es: %d días\n", totalTime);
+}
+
+void calculate_demand(int numberProdcut, struct Productos productos1[numberProdcut])
+{
+    int totalDemand = 0;
+    for (size_t i = 0; i < numberProdcut; i++)
+    {
+        totalDemand += productos1[i].demand;
+    }
+    printf("La demanda total es: %d productos.\n", totalDemand);
 }
 
 // Funcion para mostrar el menu de opciones
-void menu_data(int numberProdcut, struct Opciones productos[numberProdcut], struct Empresa materialesProductos[numberProdcut])
+void menu_data(int numberProdcut, struct Productos productos1[numberProdcut])
 {
     printf("---------------MENU Opciones ACCIONES-----------------\n");
-    printf("1. Edicion del producto\n2. Eliminacion de producto\n3. Edicion de cantidad de recursos de la empresa\n4. Calcular Tiempo de Fabricación  \n5. Salir\n");
+    printf("1. Edicion del producto\n2. Eliminacion de producto\n3. Edicion de los materiales de los productos\n4. Calcular Tiempo de Fabricación\n5. Calcular demanda total  \n6. Salir\n");
     printf("------------------------------------\n");
 
     int option, salida = 0;
@@ -207,18 +274,21 @@ void menu_data(int numberProdcut, struct Opciones productos[numberProdcut], stru
     switch (option)
     {
     case 1:
-        findID(numberProdcut, productos);
+        findID(numberProdcut, productos1);
         break;
     case 2:
-        deleteProduct(numberProdcut, productos);
+        deleteProduct(numberProdcut, productos1);
         break;
     case 3:
-        change_resources_em(numberProdcut, materialesProductos);
+        change_materials(numberProdcut, productos1);
         break;
     case 4:
-        calculate_time(numberProdcut, productos);
+        calculate_time(numberProdcut, productos1);
         break;
     case 5:
+        calculate_demand(numberProdcut, productos1);
+        break;
+    case 6:
         // Salida del programa
         printf("Saliendo del programa...\n");
         salida = 1;
@@ -230,6 +300,6 @@ void menu_data(int numberProdcut, struct Opciones productos[numberProdcut], stru
     // Si la salida es 0, se vuelve a mostrar el menu
     if (salida == 0)
     {
-        menu_data(numberProdcut, productos, materialesProductos);
+        menu_data(numberProdcut, productos1);
     }
 }
