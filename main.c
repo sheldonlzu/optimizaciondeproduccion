@@ -7,26 +7,23 @@ int main()
     numberProduct = 5;
 
     // Estructuras usadas en el programa
-    struct Opciones productos[numberProduct];
-    struct Empresa materialesProductos[numberProduct];
+    struct Productos productos1[numberProduct];
 
     // Funciones principales
 
-    get_resources_em(numberProduct, materialesProductos);
+    getname_data(numberProduct, productos1);
 
-    getname_data(numberProduct, productos);
+    createID(numberProduct, productos1);
 
-    createID(numberProduct, productos);
+    get_cuantity(numberProduct, productos1);
 
-    get_cuantity(numberProduct, productos);
+    get_materials(numberProduct, productos1);
 
-    get_materials(numberProduct, productos);
+    get_time(numberProduct, productos1);
 
-    get_time(numberProduct, productos);
+    get_demand(numberProduct, productos1);
 
-    get_demand(numberProduct, productos);
-
-    menu_data(numberProduct, productos, materialesProductos);
+    menu_data(numberProduct, productos1);
 
     return 0;
 }
